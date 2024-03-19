@@ -1,6 +1,9 @@
 package com.ecommerce.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 
@@ -23,7 +26,6 @@ public class UserService {
     public void init() {
         addUser("nima", "nima@gmail.com");
         addUser("sherpa", "sherpa@gmail.com");
-        // Add more users as needed
     }
 
     private void addUser(String username, String email) {
@@ -31,5 +33,9 @@ public class UserService {
         user.setUsername(username);
         user.setEmail(email);
         userRepository.save(user);
+    }
+    
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
