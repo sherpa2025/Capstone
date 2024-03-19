@@ -2,6 +2,7 @@
 
 ## Project Name: SherpaSnaps
 
+### Database Schema: https://github.com/sherpa2025/Capstone/wiki/Database-Schema
 ### Features
 
 1. **Admin**
