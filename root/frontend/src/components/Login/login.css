@@ -1,0 +1,32 @@
+.nav-pills .nav-link {
+  cursor: pointer;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.active {
+  background-color: #007bff;
+  color: #fff;
+}
