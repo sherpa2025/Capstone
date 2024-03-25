@@ -8,7 +8,7 @@ import com.ecommerce.entities.User;
 
 public interface AuthenticationService {
 
-	User signup(SignUpRequest signUpRequest);
+	User signup(SignUpRequest signUpRequest) throws Exception;
 	
 	JwtAuthenticationResponse signin(SignInRequest signinRequest);
 	

@@ -11,8 +11,10 @@ import com.ecommerce.dto.JwtAuthenticationResponse;
 import com.ecommerce.dto.RefreshTokenRequest;
 import com.ecommerce.dto.SignInRequest;
 import com.ecommerce.dto.SignUpRequest;
+import com.ecommerce.entities.Cart;
 import com.ecommerce.entities.Role;
 import com.ecommerce.entities.User;
+import com.ecommerce.repositories.CartRepository;
 import com.ecommerce.repositories.UserRepository;
 import com.ecommerce.services.AuthenticationService;
 import com.ecommerce.services.JWTService;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationServiceImpl implements AuthenticationService{
 
 	private final UserRepository userRepository;
+	private final CartRepository cartRepository;
 	
 	private final PasswordEncoder passwordEncoder;
 	
@@ -32,15 +35,25 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	private final JWTService jwtService;
 	
 	
-	public User signup(SignUpRequest signUpRequest) {
-		User user = new User();
+	public User signup(SignUpRequest signUpRequest) throws Exception {
 		
+	    // Check if the email already exists in the database
+	    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+	        throw new Exception("Email is already used with another account.");
+	    }
+		User user = new User();
 		user.setEmail(signUpRequest.getEmail());
 		user.setFirstName(signUpRequest.getFirstName());
 		user.setLastName(signUpRequest.getLastName());
 		user.setRole(Role.USER);
 		user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-		return userRepository.save(user);
+		
+		User savedUser = userRepository.save(user); 
+		Cart cart = new Cart();
+		cart.setCustomer(savedUser);
+		cartRepository.save(cart); 
+		
+		return savedUser;
 	}
 	
 	public JwtAuthenticationResponse signin(SignInRequest signinRequest) {
