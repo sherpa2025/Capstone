@@ -1,8 +1,8 @@
 package com.ecommerce.services.impl;
 
 import java.util.List;
+
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +72,11 @@ public class PhotoServiceImpl implements PhotoService{
 	}
 
 	@Override
-	public List<Photo> searchPhoto(String keyword) {
-		return photoRepository.searchPhoto(keyword);
+	public Photo searchPhoto(String keyword) {
+	    Optional<Photo> photoOptional = photoRepository.searchPhoto(keyword);
+	    return photoOptional.orElse(null);
 	}
+
 
 	@Override
 	public Photo findPhotoById(Long photoId) throws Exception {

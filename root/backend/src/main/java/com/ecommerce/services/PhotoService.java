@@ -14,7 +14,7 @@ public interface PhotoService {
 	
 	public List<Photo> getPhoto(String photoCategory);
 	
-	public List<Photo> searchPhoto(String keyword);
+	public Photo searchPhoto(String keyword);
 	
 	public Photo findPhotoById(Long photoId) throws Exception;
 	

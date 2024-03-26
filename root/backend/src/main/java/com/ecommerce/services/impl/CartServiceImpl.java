@@ -35,26 +35,28 @@ public class CartServiceImpl implements CartService{
 	
 	@Override
 	public CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception {
-//		User user = userService.findUserByJwt(jwt);
+        // Retrieve the user from the JWT token
+        User user = userService.findUserByJwtToken(jwt)
+                                .orElseThrow(() -> new Exception("User not authenticated"));
 		
 		Photo photo = photoService.findPhotoById(req.getPhotoId());
-//		Cart cart = cartRepository.findByCustomerId(user.getId());
-//		
-//		for(CartItem cartItem : cart.getItems()) {
-//			if(cartItem.getPhoto().equals(photo)) {
-//				int newQuantity = cartItem.getQuantity()+req.getQuantity();
-//				return updateCartItemQuantity(cartItem.getId(), newQuantity);
-//			}
-//		}
+		Cart cart = cartRepository.findByCustomerId(user.getId());
+		
+		for(CartItem cartItem : cart.getItem()) {
+			if(cartItem.getPhoto().equals(photo)) {
+				int newQuantity = cartItem.getQuantity()+req.getQuantity();
+				return updateCartItemQuantity(cartItem.getId(), newQuantity);
+			}
+		}
 		
 		CartItem newCartItem = new CartItem();
 		newCartItem.setPhoto(photo);
-//		newCartItem.setCart(cart);
+		newCartItem.setCart(cart);
 		newCartItem.setQuantity(req.getQuantity());
 		newCartItem.setTotalPrice(req.getQuantity()*photo.getPrice());
 		
 		CartItem savedCartItem = cartItemRepository.save(newCartItem); 
-//		cart.getItems().add(savedCartItem);
+		cart.getItem().add(savedCartItem);
 		
 		return savedCartItem;
 	}
@@ -74,9 +76,11 @@ public class CartServiceImpl implements CartService{
 
 	@Override
 	public Cart removeCartItem(Long cartItemId, String jwt) throws Exception {
-//		User user = userService.findUserByJwt(jwt);
+        // Retrieve the user from the JWT token
+        User user = userService.findUserByJwtToken(jwt)
+                                .orElseThrow(() -> new Exception("User not authenticated"));
 		
-//		Cart cart = cartRepository.findByCustomerId(user.getId());
+		Cart cart = cartRepository.findByCustomerId(user.getId());
 
 		Optional<CartItem> optionalCartItem =cartItemRepository.findById(cartItemId);
 		
@@ -85,9 +89,8 @@ public class CartServiceImpl implements CartService{
 		}
 		
 		CartItem item = optionalCartItem.get();
-//		cart.getItems.remove(item);
-//		return cartRepository.save(cart);
-		return null;
+		cart.getItem().remove(item);
+		return cartRepository.save(cart);
 	}
 
 	@Override
@@ -116,16 +119,14 @@ public class CartServiceImpl implements CartService{
 	cart.setTotal(calculateTotal(cart));
 	return cart;
 		
-//		User user = userService.findUserByJwtToken(jwt);
-//		return cartRepository.findByCustomerId(user.getId());
-		//return null;
 	}
 
 	@Override
-	public Cart clearCart(Long userId) throws Exception {
-//		User user = userService.findUserByJwtToken(jwt);
-		Cart cart= findCartById(userId);
-//		Cart cart= findCartById(user.getId());
+	public Cart clearCart(String jwt) throws Exception {
+		// Retrieve the user from the JWT token
+        User user = userService.findUserByJwtToken(jwt)
+                                .orElseThrow(() -> new Exception("User not authenticated"));
+		Cart cart= findCartById(user.getId());
 		cart.getItem().clear();
 		return cartRepository.save(cart);
 		

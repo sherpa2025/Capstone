@@ -1,5 +1,6 @@
 package com.ecommerce.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class CategoryServiceImpl implements CategoryService{
 		}
 		return optionalCategory.get();
 	}
+
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
 
 }

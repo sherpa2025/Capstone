@@ -17,4 +17,7 @@ public interface OrderService {
 	public List<Order> getUsersOrder(Long userId) throws Exception;
 	
 	public Order findOrderById(Long orderId) throws Exception;
+	
+    //method to retrieve all orders for the admin placed by the users/customers
+    public List<Order> getAllOrders() throws Exception;
 }

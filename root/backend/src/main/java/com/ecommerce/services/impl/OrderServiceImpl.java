@@ -115,4 +115,8 @@ public class OrderServiceImpl implements OrderService{
 		return optionalOrder.get();
 	}
 
+	@Override
+    public List<Order> getAllOrders() throws Exception {
+        return orderRepository.findAll();
+    }
 }

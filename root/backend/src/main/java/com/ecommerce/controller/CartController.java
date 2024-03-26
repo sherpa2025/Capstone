@@ -32,8 +32,10 @@ public class CartController {
 	
 	@PutMapping("/cart/add")
 	public ResponseEntity<CartItem> addItemToCart(@RequestBody AddCartItemRequest req,
-												  @RequestHeader("Authorization") String jwt) throws Exception{
-		CartItem cartItem = cartService.addItemToCart(req, jwt);
+            @RequestHeader("Authorization") String jwt) throws Exception {
+
+		// Add item to user's cart
+		CartItem cartItem = cartService.addItemToCart(req,jwt);
 		return new ResponseEntity<>(cartItem, HttpStatus.OK);
 	}
 	
@@ -57,19 +59,18 @@ public class CartController {
 			@RequestBody UpdateCartItemRequest req,
 												  @RequestHeader("Authorization") String jwt) throws Exception{
 		
-		//User user=userService.findUserByJwtToken(jwt);
-		//Cart cart = cartService.clearCart(user.getId());
-		//return new ResponseEntity<>(cart, HttpStatus.OK);
-		
-		return null;
+		Cart cart = cartService.clearCart(jwt);
+		return new ResponseEntity<>(cart, HttpStatus.OK);
+	
 	}
 	
 	@GetMapping("/cart")
 	public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws Exception{
-		//User user=userService.findUserByJwtToken(jwt);
-		//Cart cart = cartService.findCartByUserId(user.getId());
-		//return new ResponseEntity<>(cart, HttpStatus.OK);
-		return null;
+		// Retrieve the user from the JWT token
+        User user = userService.findUserByJwtToken(jwt)
+                                .orElseThrow(() -> new Exception("User not authenticated"));
+		Cart cart = cartService.findCartByUserId(user.getId());
+		return new ResponseEntity<>(cart, HttpStatus.OK);
 	}
 	
 }
